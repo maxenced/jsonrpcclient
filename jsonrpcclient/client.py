@@ -39,6 +39,7 @@ class Client(metaclass=ABCMeta):
         validate_against_schema: bool = True,
         id_generator: Optional[Iterator] = None,
         basic_logging: bool = False,
+        log_level = "info"
     ) -> None:
         """
         Args:
@@ -51,6 +52,7 @@ class Client(metaclass=ABCMeta):
         self.trim_log_values = trim_log_values
         self.validate_against_schema = validate_against_schema
         self.id_generator = id_generator
+        self.log_level = log_level
         if basic_logging:
             self.basic_logging()
 
@@ -87,7 +89,7 @@ class Client(metaclass=ABCMeta):
             request: The JSON-RPC request string.
             trim_log_values: Log an abbreviated version of the request.
         """
-        return log_(request, request_log, "info", trim=trim_log_values, **kwargs)
+        return log_(request, request_log, self.log_level, trim=trim_log_values, **kwargs)
 
     @apply_self
     def log_response(
@@ -104,7 +106,7 @@ class Client(metaclass=ABCMeta):
                 which takes a string.
             trim_log_values: Log an abbreviated version of the response.
         """
-        return log_(response.text, response_log, "info", trim=trim_log_values, **kwargs)
+        return log_(response.text, response_log, self.log_level, trim=trim_log_values, **kwargs)
 
     @abstractmethod
     def send_message(
