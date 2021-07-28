@@ -66,7 +66,7 @@ class Client(metaclass=ABCMeta):
                 logging.Formatter(fmt=self.DEFAULT_REQUEST_LOG_FORMAT)
             )
             request_log.addHandler(request_handler)
-            request_log.setLevel(logging.INFO)
+            request_log.setLevel(logging.DEBUG)
         # Response handler
         if len(response_log.handlers) == 0:
             response_handler = logging.StreamHandler()
@@ -74,7 +74,7 @@ class Client(metaclass=ABCMeta):
                 logging.Formatter(fmt=self.DEFAULT_RESPONSE_LOG_FORMAT)
             )
             response_log.addHandler(response_handler)
-            response_log.setLevel(logging.INFO)
+            response_log.setLevel(logging.DEBUG)
 
     @apply_self
     def log_request(
@@ -87,7 +87,7 @@ class Client(metaclass=ABCMeta):
             request: The JSON-RPC request string.
             trim_log_values: Log an abbreviated version of the request.
         """
-        return log_(request, request_log, "info", trim=trim_log_values, **kwargs)
+        return log_(request, request_log, "debug", trim=trim_log_values, **kwargs)
 
     @apply_self
     def log_response(
@@ -104,7 +104,7 @@ class Client(metaclass=ABCMeta):
                 which takes a string.
             trim_log_values: Log an abbreviated version of the response.
         """
-        return log_(response.text, response_log, "info", trim=trim_log_values, **kwargs)
+        return log_(response.text, response_log, "debug", trim=trim_log_values, **kwargs)
 
     @abstractmethod
     def send_message(
